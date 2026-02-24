@@ -18,14 +18,15 @@ public class DBCache implements TranslationCache {
     private final MongoClient client;
     private final MongoCollection<CacheEntry> collection;
 
-    public DBCache(String uri, String database){
+    public DBCache(String uri, String database, int maxEntries, int expireMinutes){
         if(uri == null || uri.isBlank()) throw new IllegalArgumentException("URI must not be null or blank");
-
         if(database == null || database.isBlank()) throw new IllegalArgumentException("Database must not be null or blank");
+        if(maxEntries <= 0) throw new IllegalArgumentException("maxEntries must be positive");
+        if(expireMinutes <= 0) throw new IllegalArgumentException("expireMinutes must be positive");
 
         this.local = Caffeine.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
-            .maximumSize(1000)
+            .expireAfterWrite(expireMinutes, TimeUnit.MINUTES)
+            .maximumSize(maxEntries)
             .build();
 
         this.client = MongoClients.create(

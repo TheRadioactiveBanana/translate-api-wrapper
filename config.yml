@@ -17,7 +17,16 @@ deepl-auth-key: ""
 libre: false
 libre-url: "https://translate.eradication.fun/translate"
 
-# Persistent translation cache (MongoDB)
+# Translation cache
+cache:
+  # "memory" (default) or "db"
+  type: "memory"
+  # Maximum number of cached translation entries
+  max-entries: 1000
+  # TTL in minutes before a cached value expires
+  expire-minutes: 10
+
+# Persistent translation cache (MongoDB), used when cache.type = "db"
 db:
   uri: "mongodb://localhost:27017"
   database: "fish"

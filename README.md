@@ -7,12 +7,18 @@ Built specifically for `>|||> Fish Mindustry Servers`, but usable otherwise.
 
 - Backends: Google Translate, DeepL, LibreTranslate
 - Language auto-detection (`from: auto`)
-- Persistent translation cache (MongoDB)
+- Translation cache (`memory` or MongoDB-backed)
 - Request rate limiting
 
 ## Configuration
 
 Root [`config.yml`](config.yml) is an example config.
+
+Cache-related keys:
+- `cache.type: memory|db` (optional, defaults to `memory`)
+- `cache.max-entries: <int>` (optional, defaults to `1000`)
+- `cache.expire-minutes: <int>` (optional, defaults to `10`)
+- `db.uri`, `db.database` (required only when `cache.type: db`)
 
 Backend-related keys:
 - `google: true|false`

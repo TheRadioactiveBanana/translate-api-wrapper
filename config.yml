@@ -1,0 +1,29 @@
+# FishTranslateAPI example configuration
+
+# Web server address and port
+host: "0.0.0.0"
+port: 8080
+
+# API token used by AuthFilter (header: token)
+token: "example-token"
+
+# Maximum request body length for /api/translate
+max-size: 2000
+
+# Enabled translation backends
+google: true
+deepl: false
+deepl-auth-key: ""
+
+# Persistent translation cache (MongoDB)
+db:
+  uri: "mongodb://localhost:27017"
+  database: "fish"
+
+# Global rate limiting
+# defaults if omitted: spacing-ms=1000, cap=5, max-entries=1000, expire-minutes=1
+rate-limit:
+  spacing-ms: 1000
+  cap: 5
+  max-entries: 1000
+  expire-minutes: 1

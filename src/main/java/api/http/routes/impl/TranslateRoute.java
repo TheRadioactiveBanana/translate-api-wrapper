@@ -24,7 +24,7 @@ public class TranslateRoute extends AbstractHTTPRoute {
         return switch(backend){
             case "google" -> translators.stream().filter(t->t instanceof GoogleTranslator).findFirst().orElse(null);
             case "deepl" -> translators.stream().filter(t->t instanceof DeepLTranslator).findFirst().orElse(null);
-            case "libre" -> throw new NotImplementedResponse("LibreTranslate currently not implemented");
+            case "libre" -> translators.stream().filter(t->t instanceof LibreTranslator).findFirst().orElse(null);
             case null -> translators.stream().findAny().orElse(null);
             default -> null;
         };

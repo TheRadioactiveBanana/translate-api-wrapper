@@ -23,7 +23,6 @@ public class DBCache implements TranslationCache {
 
         if(database == null || database.isBlank()) throw new IllegalArgumentException("Database must not be null or blank");
 
-
         this.local = Caffeine.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .maximumSize(1000)

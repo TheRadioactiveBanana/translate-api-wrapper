@@ -38,6 +38,7 @@ public class TranslateAPIMain {
     private static void setupClients(){
         if(Config.bool("google")) translators.add(new GoogleTranslator());
         if(Config.bool("deepl")) translators.add(new DeepLTranslator(Config.string("deepl-auth-key")));
+        if(Config.bool("libre")) translators.add(new LibreTranslator(Config.string("libre-url")));
 
         if(translators.isEmpty()) throw new IllegalArgumentException("No translators configured!");
     }

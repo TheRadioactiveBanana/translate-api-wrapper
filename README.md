@@ -5,7 +5,7 @@ Built specifically for `>|||> Fish Mindustry Servers`, but usable otherwise.
 
 ## Current support
 
-- Backends: Google Translate, DeepL (Planned: LibreTranslate)
+- Backends: Google Translate, DeepL, LibreTranslate
 - Language auto-detection (`from: auto`)
 - Persistent translation cache (MongoDB)
 - Request rate limiting
@@ -18,6 +18,8 @@ Backend-related keys:
 - `google: true|false`
 - `deepl: true|false`
 - `deepl-auth-key: "<your deepl api key>"` (required when `deepl: true`)
+- `libre: true|false`
+- `libre-url: "<libretranslate /translate endpoint>"` (optional)
 
 ## Endpoints
 
@@ -27,7 +29,7 @@ Headers:
 - `token: <token>`
 - `to: <lang>`
 - `from: <lang>|auto` (optional, defaults to `auto`)
-- `backend: google|deepl|null` (optional, defaults to first configured backend)
+- `backend: google|deepl|libre|null` (optional, defaults to first configured backend)
 
 Body:
 - Plain text to translate

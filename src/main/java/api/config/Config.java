@@ -6,6 +6,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.*;
 import java.util.List;
+
 @SuppressWarnings("unused")
 public final class Config {
 

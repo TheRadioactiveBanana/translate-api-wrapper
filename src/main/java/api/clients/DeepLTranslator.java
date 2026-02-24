@@ -13,6 +13,13 @@ public class DeepLTranslator implements TranslationClient {
         this.client = new Translator(authKey);
     }
 
+    private static String normalizeCode(String code){
+        return switch(code.toLowerCase()){
+            case "zh-cn", "zh-tw" -> "ZH";
+            default -> code.toUpperCase();
+        };
+    }
+
     @Override
     public String translate(String text, Language from, Language to){
         try{
@@ -25,12 +32,5 @@ public class DeepLTranslator implements TranslationClient {
         }catch(DeepLException | InterruptedException e){
             throw new RuntimeException("DeepL translator request failed", e);
         }
-    }
-
-    private static String normalizeCode(String code){
-        return switch(code.toLowerCase()){
-            case "zh-cn", "zh-tw" -> "ZH";
-            default -> code.toUpperCase();
-        };
     }
 }

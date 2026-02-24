@@ -95,7 +95,8 @@ public class DBCache implements TranslationCache {
 
         @BsonCreator
         @SuppressWarnings("unused")
-        public CacheEntry(){}
+        public CacheEntry(){
+        }
 
         public CacheEntry(String input, String from, String to, String output){
             this.input = input;
@@ -104,5 +105,4 @@ public class DBCache implements TranslationCache {
             this.output = output;
         }
     }
-
 }

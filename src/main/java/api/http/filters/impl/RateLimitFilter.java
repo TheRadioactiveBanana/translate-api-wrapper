@@ -57,5 +57,4 @@ public class RateLimitFilter extends AbstractFilter {
             return occurrences.incrementAndGet() <= cap;
         }
     }
-
 }

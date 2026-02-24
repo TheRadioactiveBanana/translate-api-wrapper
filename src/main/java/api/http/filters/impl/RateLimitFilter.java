@@ -35,6 +35,7 @@ public class RateLimitFilter extends AbstractFilter {
 
     /**
      * Keeps track of X actions in Y units of time.
+     * Ripped from Arc
      */
     public static class RateLimiter {
         private final AtomicInteger occurrences = new AtomicInteger();
@@ -43,8 +44,7 @@ public class RateLimitFilter extends AbstractFilter {
         /**
          * @param spacing the spacing between action chunks in milliseconds
          * @param cap     the maximum number of actions per chunk
-         * @return whether an action is allowed.
-         *
+         * @return whether an action is allowed
          */
         public boolean allow(long spacing, int cap){
             long now = currentTimeMillis();

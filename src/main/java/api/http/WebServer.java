@@ -37,7 +37,7 @@ public class WebServer implements Consumer<JavalinConfig>, EndpointGroup, Reques
         config.routes.apiBuilder(this);
         config.requestLogger.http(this);
 
-        if(Config.boolOr("proxy.enabled", false)){
+        if(Config.boolOr("proxy", true)){
             config.contextResolver.ip = WebServer::resolveClientIp;
         }
     }

@@ -44,5 +44,4 @@ rate-limit:
 
 # Trust proxy forwarding headers for client IP resolution.
 # Enable this when running behind nginx or another reverse proxy that overwrites these headers.
-proxy:
-  enabled: false
+proxy: true

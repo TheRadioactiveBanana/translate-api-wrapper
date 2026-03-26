@@ -18,6 +18,12 @@ public class GoogleTranslator implements TranslationClient {
         .followRedirects(false)
         .build();
 
+    @Override
+    public String backend(){
+        return "google";
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         String body = "tl=" + to.code + "&sl=" + from.code + "&q=" + URLEncoder.encode(text, StandardCharsets.UTF_8);
 

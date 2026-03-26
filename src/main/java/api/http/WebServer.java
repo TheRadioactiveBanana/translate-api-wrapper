@@ -18,6 +18,7 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 public class WebServer implements Consumer<JavalinConfig>, EndpointGroup, RequestLogger {
 
     private static final Logger log = LoggerFactory.getLogger(WebServer.class);
+
     public final String host;
     public final int port;
     private final Javalin javalin;
@@ -26,28 +27,32 @@ public class WebServer implements Consumer<JavalinConfig>, EndpointGroup, Reques
         this.host = host;
         this.port = port;
 
-        javalin = Javalin.createAndStart(this);
+        javalin = Javalin.create(this).start();
     }
 
     @Override
     public void accept(JavalinConfig config){
-        config.jetty.defaultHost = host;
-        config.jetty.defaultPort = port;
-        config.router.apiBuilder(this);
+        config.jetty.host = host;
+        config.jetty.port = port;
+        config.routes.apiBuilder(this);
         config.requestLogger.http(this);
+
+        if(Config.boolOr("proxy.enabled", false)){
+            config.contextResolver.ip = WebServer::resolveClientIp;
+        }
     }
 
     @Override
     public void addEndpoints(){
-        long spacingMs = Config.integerOr("rate-limit.spacing-ms", 1000);
-        int cap = Config.integerOr("rate-limit.cap", 5);
-        int maxEntries = Config.integerOr("rate-limit.max-entries", 1000);
-        int expireMinutes = Config.integerOr("rate-limit.expire-minutes", 1);
-
-        before(new RateLimitFilter(spacingMs, cap, maxEntries, expireMinutes));
+        before(new RateLimitFilter(
+            Config.integerOr("rate-limit.spacing-ms", 1000),
+            Config.integerOr("rate-limit.cap", 5),
+            Config.integerOr("rate-limit.max-entries", 1000),
+            Config.integerOr("rate-limit.expire-minutes", 1)
+        ));
 
         path("api", ()->{
-            before("/translate", new AuthFilter());
+            before("translate", new AuthFilter());
             post("translate", new TranslateRoute(Config.integer("max-size"), cache));
 
             get("languages", new GetLanguagesRoute());
@@ -56,10 +61,55 @@ public class WebServer implements Consumer<JavalinConfig>, EndpointGroup, Reques
 
     @Override
     public void handle(@NotNull Context ctx, @NotNull Float executionTimeMs){
-        log.info("TX -> {}/{} {} {}ms", ctx.ip(), ctx.path(), ctx.statusCode(), executionTimeMs);
+        log.info(
+            "[{}ms] {} - {} -> {}",
+            executionTimeMs,
+            ctx.path(),
+            ctx.status().getCode() + ctx.status().getMessage(),
+            ctx.ip()
+        );
     }
 
     public void stop(){
         javalin.stop();
+    }
+
+    private static String resolveClientIp(Context ctx){
+        String forwarded = ctx.header(Header.FORWARDED);
+        if(forwarded != null){
+            for(String part : forwarded.split(",")){
+                for(String token : part.split(";")){
+                    String trimmed = token.trim();
+                    if(trimmed.regionMatches(true, 0, "for=", 0, 4)){
+                        String value = trimmed.substring(4).trim();
+                        if(value.startsWith("\"") && value.endsWith("\"") && value.length() >= 2){
+                            value = value.substring(1, value.length() - 1);
+                        }
+                        if(value.startsWith("[")){
+                            int end = value.indexOf(']');
+                            if(end > 0) return value.substring(1, end);
+                        }
+                        int lastColon = value.lastIndexOf(':');
+                        if(lastColon > 0 && value.indexOf(':') == lastColon){
+                            return value.substring(0, lastColon);
+                        }
+                        return value;
+                    }
+                }
+            }
+        }
+
+        String xForwardedFor = ctx.header(Header.X_FORWARDED_FOR);
+        if(xForwardedFor != null){
+            String first = xForwardedFor.split(",")[0].trim();
+            if(!first.isEmpty()) return first;
+        }
+
+        String realIp = ctx.header("X-Real-IP");
+        if(realIp != null && !realIp.isBlank()){
+            return realIp.trim();
+        }
+
+        return ctx.req().getRemoteAddr();
     }
 }

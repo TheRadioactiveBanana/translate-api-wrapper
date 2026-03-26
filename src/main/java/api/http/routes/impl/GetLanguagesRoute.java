@@ -9,11 +9,14 @@ public class GetLanguagesRoute extends AbstractHTTPRoute {
     @Override
     public String execute(Context context){
         JSONArray array = new JSONArray();
+
         for(Language language : Language.values()){
             array.add(new JSONObject()
                 .fluentPut("code", language.code)
-                .fluentPut("name", language.name));
+                .fluentPut("name", language.name)
+            );
         }
+
         return array.toString();
     }
 }

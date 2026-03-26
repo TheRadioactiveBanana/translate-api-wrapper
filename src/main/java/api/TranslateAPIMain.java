@@ -12,18 +12,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TranslateAPIMain {
 
     private static final Logger log = LoggerFactory.getLogger(TranslateAPIMain.class);
+    public static final Set<TranslationClient> translators = ConcurrentHashMap.newKeySet();
 
     public static String token;
     public static WebServer webServer;
     public static TranslationCache cache;
 
-    public static Set<TranslationClient> translators = ConcurrentHashMap.newKeySet();
-
     static void main(String[] args){
-        Config.init();
+        if(args.length != 0) Config.init(args[0]);
+        else Config.init();
 
-        if(args.length > 0) token = args[0];
-        else token = resolveToken();
+        token = resolveToken();
 
         if(token == null) throw new IllegalArgumentException("No token found.");
 
@@ -39,6 +38,7 @@ public class TranslateAPIMain {
         if(Config.bool("google")) translators.add(new GoogleTranslator());
         if(Config.bool("deepl")) translators.add(new DeepLTranslator(Config.string("deepl-auth-key")));
         if(Config.bool("libre")) translators.add(new LibreTranslator(Config.string("libre-url")));
+        if(Config.bool("llm")) translators.add(new LLMTranslator(Config.string("llm-url"), Config.integer("llm-max-tokens")));
 
         if(translators.isEmpty()) throw new IllegalArgumentException("No translators configured!");
     }

@@ -13,6 +13,11 @@ public class LibreTranslator implements TranslationClient {
     }
 
     @Override
+    public String backend(){
+        return "libre";
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         try{
             var source = from == Language.auto ? "auto" : normalizeCode(from.code);

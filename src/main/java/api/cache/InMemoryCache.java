@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class InMemoryCache implements TranslationCache {
 
-    private final Cache<CacheKey, String> cache;
+    private final Cache<CacheEntry, String> cache;
 
     public InMemoryCache(int maxEntries, int expireMinutes){
         if(maxEntries <= 0) throw new IllegalArgumentException("maxEntries must be positive");
@@ -21,15 +21,11 @@ public class InMemoryCache implements TranslationCache {
 
     @Override
     public String get(String input, String from, String to){
-        return cache.getIfPresent(new CacheKey(input, from, to));
+        return cache.getIfPresent(new CacheEntry(input, from, to));
     }
 
     @Override
     public void put(String input, String from, String to, String output){
-        cache.put(new CacheKey(input, from, to), output);
-    }
-
-    private record CacheKey(String input, String from, String to) {
-
+        cache.put(new CacheEntry(input, from, to), output);
     }
 }

@@ -16,6 +16,9 @@ deepl: false
 deepl-auth-key: ""
 libre: false
 libre-url: "https://translate.eradication.fun/translate"
+llm: false
+llm-url: "http://127.0.0.1:8081/v1/chat/completions"
+llm-max-tokens: 256
 
 # Translation cache
 cache:
@@ -38,3 +41,8 @@ rate-limit:
   cap: 5
   max-entries: 1000
   expire-minutes: 1
+
+# Trust proxy forwarding headers for client IP resolution.
+# Enable this when running behind nginx or another reverse proxy that overwrites these headers.
+proxy:
+  enabled: false

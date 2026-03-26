@@ -5,7 +5,7 @@ Built specifically for `>|||> Fish Mindustry Servers`, but usable otherwise.
 
 ## Current support
 
-- Backends: Google Translate, DeepL, LibreTranslate
+- Backends: Google Translate, DeepL, LibreTranslate, and an LLM-compatible HTTP backend
 - Language auto-detection (`from: auto`)
 - Translation cache (`memory` or MongoDB-backed)
 - Request rate limiting
@@ -26,6 +26,13 @@ Backend-related keys:
 - `deepl-auth-key: "<your deepl api key>"` (required when `deepl: true`)
 - `libre: true|false`
 - `libre-url: "<libretranslate /translate endpoint>"` (optional)
+- `llm: true|false`
+- `llm-url: "http://127.0.0.1:8081/v1/chat/completions"` (required when `llm: true`)
+- `llm-max-tokens: <int>` (optional, defaults to `256`)
+
+Proxy-related keys:
+- `proxy.enabled: true|false` (optional, defaults to `false`)
+  When enabled, client IPs are resolved from `Forwarded`, then `X-Forwarded-For`, then `X-Real-IP`.
 
 ## Endpoints
 
@@ -35,7 +42,7 @@ Headers:
 - `token: <token>`
 - `to: <lang>`
 - `from: <lang>|auto` (optional, defaults to `auto`)
-- `backend: google|deepl|libre|null` (optional, defaults to first configured backend)
+- `backend: google|deepl|libre|llm|null` (optional, defaults to first configured backend)
 
 Body:
 - Plain text to translate
@@ -43,7 +50,7 @@ Body:
 Response:
 - Header `backend: <backend>|cache`
 - Header `time: <ms>`
-- Body translated text
+- Body: translated text
 
 ### `GET /api/languages`
 

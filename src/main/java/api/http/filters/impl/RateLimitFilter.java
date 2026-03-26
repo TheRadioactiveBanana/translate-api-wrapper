@@ -26,9 +26,7 @@ public class RateLimitFilter extends AbstractFilter {
 
     @Override
     public void filter(Context context){
-        if(!limiters.get(context.ip(), _->new RateLimiter())
-            .allow(spacingMs, cap)
-        ){
+        if(!limiters.get(context.ip(), _->new RateLimiter()).allow(spacingMs, cap)){
             throw new TooManyRequestsResponse();
         }
     }

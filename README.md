@@ -27,7 +27,7 @@ Backend-related keys:
 - `libre: true|false`
 - `libre-url: "<libretranslate /translate endpoint>"` (optional)
 - `llm: true|false`
-- `llm-url: "http://127.0.0.1:8081/v1/chat/completions"` (required when `llm: true`)
+- `llm-url: "http://127.0.0.1:8081"` (required when `llm: true`)
 - `llm-max-tokens: <int>` (optional, defaults to `256`)
 
 Proxy-related keys:

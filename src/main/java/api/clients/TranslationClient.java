@@ -5,5 +5,7 @@ import api.language.Language;
 public interface TranslationClient {
 
     String backend();
+    int quality();
+
     String translate(String text, Language from, Language to);
 }

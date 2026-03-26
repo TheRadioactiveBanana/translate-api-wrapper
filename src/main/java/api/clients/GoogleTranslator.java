@@ -24,6 +24,11 @@ public class GoogleTranslator implements TranslationClient {
     }
 
     @Override
+    public int quality(){
+        return 0;
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         String body = "tl=" + to.code + "&sl=" + from.code + "&q=" + URLEncoder.encode(text, StandardCharsets.UTF_8);
 

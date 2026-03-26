@@ -26,6 +26,11 @@ public class DeepLTranslator implements TranslationClient {
     }
 
     @Override
+    public int quality(){
+        return 2;
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         try{
             var source = from == Language.auto ? null : normalizeCode(from.code);

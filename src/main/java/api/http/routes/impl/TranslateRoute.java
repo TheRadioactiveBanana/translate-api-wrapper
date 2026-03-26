@@ -9,6 +9,7 @@ import org.slf4j.*;
 
 import static api.TranslateAPIMain.*;
 import static api.language.Language.auto;
+import static java.lang.Integer.compare;
 
 public class TranslateRoute extends AbstractHTTPRoute {
 
@@ -69,7 +70,11 @@ public class TranslateRoute extends AbstractHTTPRoute {
     }
 
     private static TranslationClient resolveClient(String backend){
-        if(backend == null) return translators.stream().findAny().orElse(null);
+        if(backend == null){
+            return translators.stream()
+                .max((a, b)->compare(b.quality(), a.quality()))
+                .orElse(null);
+        }
         else return translators.stream().filter(t->t.backend().equals(backend.toLowerCase())).findFirst().orElse(null);
     }
 }

@@ -18,6 +18,11 @@ public class LibreTranslator implements TranslationClient {
     }
 
     @Override
+    public int quality(){
+        return 1;
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         try{
             var source = from == Language.auto ? "auto" : normalizeCode(from.code);

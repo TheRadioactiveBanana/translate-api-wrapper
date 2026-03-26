@@ -46,6 +46,11 @@ public class LLMTranslator implements TranslationClient {
     }
 
     @Override
+    public int quality(){
+        return 3;
+    }
+
+    @Override
     public String translate(String text, Language from, Language to){
         var requestBody = new JSONObject();
 
